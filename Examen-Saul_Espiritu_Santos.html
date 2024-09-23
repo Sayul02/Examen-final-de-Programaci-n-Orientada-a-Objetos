@@ -1,0 +1,78 @@
+<div>
+  <h3>Peliculas</h3>
+	<button type='button' id='btnCargar'>Cargar</button>
+  <select id='slcUsuarios'></select>
+  <div id='inf'></div>
+</div>
+
+<div>
+	<h3>Alumno</h3>
+  <div id=infAlumn></div>
+</div>
+
+<script>
+  /*1.- Se conectarán a la API de studios Ghibli en esta URL Base https://ghibliapi.herokuapp.com
+y con la información que devuelva, van a llenar un select con el titulo de los primeros 5 registros que se encuentren, una vez que se seleccione uno,. mostraran los 5 datos que quieran de ese film.*/
+  btnCargar=document.getElementById('btnCargar');
+  btnCargar.addEventListener('click',()=>{
+    fetch('https://ghibliapi.herokuapp.com/films/')
+    .then(response => response.json())
+    .then(datos => {
+      let detalles = document.getElementById('slcUsuarios')
+      detalles.innerHTML='';
+      datos.forEach(film => {
+        detalles.innerHTML+=`<option value='${film.id}'>
+ 					${film.title}
+  		</option>`
+      });
+    });
+  });
+  const select=document.getElementById('slcUsuarios');
+  select.addEventListener('change', ()=>{
+    fetch('https://ghibliapi.herokuapp.com/films/'+slcUsuarios.value)
+    .then(response => response.json())
+    .then(datos => {
+      let descriptions = document.getElementById('inf')
+      descriptions.innerHTML=`<div>
+      	<h3>${datos.title}</h3>
+				<p>${datos.director}</p>
+				<p>${datos.description}</p>
+				<p>${datos.release_date}</p>
+				<p>${datos.producer}</p>
+      </div>`
+    })
+  })  
+
+/*2.- Crear una clase llamada Alumno que guarde la información de un alumno (entre 4 y 6 datos no de ellos será promedio general), deberá tener un método que devuelva la información como elementos HTML, además de un método que reciba otro alumno y devuelva el nombre del alumno con mejor promedio.*/
+  class alumno{
+    constructor(nombre, correo, numerodecuenta, promedio){
+      this.nombre=nombre;
+      this.correo=correo;
+      this.numerodecuenta=numerodecuenta;
+      this.promedio=promedio;
+    }
+    infoAlumno(nombre, correo, numerodecuenta, promedio){
+      let detalles=document.getElementById('infAlumn')
+      detalles.innerHTML='';
+      detalles.innerHTML=`<div>
+      	<h3>${nombre}</h3>
+				<h2>${promedio}</h2>
+				<p>${correo}</p>
+				<p>${numerodecuenta}</p>
+      </div>`
+    }
+    mejorPromedio(nombre, promedio){
+    	let mjrPromedio='';
+      if(mjrPromedio<promedio){
+        mjrPromedio=promedio;
+        return nombre + ' es el alumno con mejor promedio con ' + mjrPromedio;
+      }
+  	}
+  }
+
+/*3.- Crear un ciclo que llene un vector de 10 con aleatorios entre 1 y 20*/
+  let vec=[0,0,0,0,0,0,0,0,0,0]
+  for(let i=0; i<10; i++)
+   	vec[i]=Math.floor(Math.random()*20+1)
+  console.log(vec);
+</script>
